@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Name — Portfolio</title>
+  <meta name="description" content="Portfolio of Your Name: selected projects, background and contact details.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top">Your Name</a>
+    <nav aria-label="Main">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <p class="eyebrow">Your role · Your city</p>
+      <h1>A short, plain sentence about what you make and who you make it for.</h1>
+      <a class="button" href="#work">See my work</a>
+    </section>
+
+    <section id="work" class="section">
+      <div class="section-head">
+        <h2>Selected work</h2>
+        <div class="slider-controls">
+          <span class="slider-count" aria-live="polite"></span>
+          <button class="slider-arrow" type="button" data-dir="-1" aria-label="Previous project">&larr;</button>
+          <button class="slider-arrow" type="button" data-dir="1" aria-label="Next project">&rarr;</button>
+        </div>
+      </div>
+
+      <!-- To add a project, copy one <article class="slide"> block. The dots and counter update on their own. -->
+      <div class="slider" role="region" aria-roledescription="carousel" aria-label="Projects">
+        <div class="slider-track" tabindex="0">
+          <article class="slide">
+            <img src="images/project-1.svg" alt="Placeholder image for Project One" width="1200" height="900">
+            <div class="slide-body">
+              <p class="slide-meta">Design · 2026</p>
+              <h3>Project One</h3>
+              <p>A sentence or two on what this was, what you did, and how it turned out.</p>
+              <a href="#">View project &rarr;</a>
+            </div>
+          </article>
+
+          <article class="slide">
+            <img src="images/project-2.svg" alt="Placeholder image for Project Two" loading="lazy" width="1200" height="900">
+            <div class="slide-body">
+              <p class="slide-meta">Development · 2025</p>
+              <h3>Project Two</h3>
+              <p>A sentence or two on what this was, what you did, and how it turned out.</p>
+              <a href="#">View project &rarr;</a>
+            </div>
+          </article>
+
+          <article class="slide">
+            <img src="images/project-3.svg" alt="Placeholder image for Project Three" loading="lazy" width="1200" height="900">
+            <div class="slide-body">
+              <p class="slide-meta">Branding · 2025</p>
+              <h3>Project Three</h3>
+              <p>A sentence or two on what this was, what you did, and how it turned out.</p>
+              <a href="#">View project &rarr;</a>
+            </div>
+          </article>
+
+          <article class="slide">
+            <img src="images/project-4.svg" alt="Placeholder image for Project Four" loading="lazy" width="1200" height="900">
+            <div class="slide-body">
+              <p class="slide-meta">Research · 2024</p>
+              <h3>Project Four</h3>
+              <p>A sentence or two on what this was, what you did, and how it turned out.</p>
+              <a href="#">View project &rarr;</a>
+            </div>
+          </article>
+        </div>
+        <div class="slider-dots"></div>
+      </div>
+    </section>
+
+    <section id="about" class="section about">
+      <h2>About</h2>
+      <div>
+        <p>A few sentences about you: your background, what you care about in your work, and the kind of projects you want more of.</p>
+        <p>Add a second paragraph for past clients, employers or tools, or delete this one.</p>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact">
+      <h2>Get in touch</h2>
+      <a class="contact-email" href="mailto:you@example.com">you@example.com</a>
+      <ul class="contact-links">
+        <li><a href="#">LinkedIn</a></li>
+        <li><a href="#">GitHub</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Your Name</p>
+  </footer>
+</body>
+</html>
