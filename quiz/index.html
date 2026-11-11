@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Statische pubquiz</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Lokale pubquiz</p>
+      <h1 id="app-title">Mijn pubquiz</h1>
+    </div>
+    <nav class="tabs" aria-label="Hoofdmenu">
+      <button class="tab is-active" data-view="editor">Beheren</button>
+      <button class="tab" data-view="presentation">Presenteren</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="editor-view" class="view is-active">
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">Quiz samenstellen</p>
+          <h2>Vragen beheren</h2>
+        </div>
+        <div class="toolbar">
+          <button id="new-quiz-button" class="button secondary">Nieuwe quiz</button>
+          <button id="export-button" class="button secondary">Exporteer JSON</button>
+          <label class="button secondary file-button">
+            Importeer JSON
+            <input id="import-input" type="file" accept="application/json,.json">
+          </label>
+        </div>
+      </div>
+
+      <div id="editor-message" class="message" role="status" aria-live="polite"></div>
+
+      <div class="editor-layout">
+        <section class="panel">
+          <label for="quiz-title">Naam van de quiz</label>
+          <input id="quiz-title" type="text" placeholder="Bijvoorbeeld: Vrijdagavondquiz">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Vraagbank</p>
+              <h3>Jouw vragen</h3>
+            </div>
+            <button id="add-question-button" class="button primary">Vraag toevoegen</button>
+          </div>
+          <div id="question-list" class="question-list"></div>
+        </section>
+
+        <section class="panel question-editor-panel">
+          <div id="empty-editor" class="empty-state">
+            <span class="empty-icon">?</span>
+            <h3>Selecteer een vraag</h3>
+            <p>Voeg een vraag toe of kies een vraag uit de lijst om te beginnen.</p>
+          </div>
+          <form id="question-form" hidden>
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Vraag bewerken</p>
+                <h3 id="question-editor-title">Vraag 1</h3>
+              </div>
+              <button id="delete-question-button" type="button" class="button danger">Verwijderen</button>
+            </div>
+            <label for="question-type">Vraagtype</label>
+            <select id="question-type"></select>
+            <div id="type-fields"></div>
+            <button class="button primary" type="submit">Vraag opslaan</button>
+          </form>
+        </section>
+      </div>
+    </section>
+
+    <section id="presentation-view" class="view">
+      <div class="presentation-shell">
+        <div class="presentation-topline">
+          <span id="presentation-quiz-title">Mijn pubquiz</span>
+          <span id="question-counter">0 / 0</span>
+        </div>
+        <div id="presentation-content" class="presentation-content"></div>
+        <div class="presentation-actions">
+          <button id="previous-button" class="button secondary">Vorige</button>
+          <button id="reveal-button" class="button primary">Toon antwoord</button>
+          <button id="next-button" class="button secondary">Volgende</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>De quiz wordt alleen in deze browser opgeslagen.</span>
+    <span id="save-status">Opgeslagen</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

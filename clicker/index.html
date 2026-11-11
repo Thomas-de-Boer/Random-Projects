@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#10111d" />
+    <title>Millie Bobby Brown: Star Clicker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark">✦</span>
+          <div>
+            <p class="eyebrow">THE FAN-MADE</p>
+            <h1>STAR CLICKER</h1>
+          </div>
+        </div>
+        <div class="save-status" aria-live="polite">
+          <span class="status-dot"></span>
+          <span id="saveStatus">AUTO-SAVE ON</span>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow accent">A MILLIE BOBBY BROWN FAN GAME</p>
+          <h2>Make the spotlight<br /><em>shine brighter.</em></h2>
+          <p class="hero-description">Tap the star, build your career, and turn every little moment into a headline.</p>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-card">
+            <span class="stat-label">STAR POINTS</span>
+            <strong id="points">0</strong>
+            <small id="rate">+0 / sec</small>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">TOTAL CLICKS</span>
+            <strong id="clicks">0</strong>
+            <small>keep going</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="game-grid">
+        <div class="stage-panel">
+          <div class="stage-heading">
+            <span>01 / YOUR MOMENT</span>
+            <span id="levelLabel">LEVEL 1</span>
+          </div>
+          <button class="star-button" id="starButton" aria-label="Click to earn star points">
+            <span class="button-ring ring-one"></span>
+            <span class="button-ring ring-two"></span>
+            <span class="star-art" aria-hidden="true">
+              <span class="star-glow"></span>
+              <span class="star-shape">★</span>
+            </span>
+            <span class="click-prompt">CLICK<br /><b>THE STAR</b></span>
+          </button>
+          <div class="quote-card">
+            <span class="quote-mark">“</span>
+            <p id="quote">Every click is another step toward the premiere.</p>
+          </div>
+        </div>
+
+        <aside class="upgrades-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">02 / LEVEL UP</span>
+              <h3>Build the buzz</h3>
+            </div>
+            <span class="upgrade-count" id="upgradeCount">0 / 6</span>
+          </div>
+          <div class="upgrade-list" id="upgradeList"></div>
+        </aside>
+      </section>
+
+      <section class="milestones">
+        <div class="milestone-heading">
+          <div>
+            <span class="eyebrow">03 / MILESTONES</span>
+            <h3>Your highlight reel</h3>
+          </div>
+          <span id="milestoneProgress">0 / 5 unlocked</span>
+        </div>
+        <div class="milestone-list" id="milestoneList"></div>
+      </section>
+
+      <footer>
+        <span>Made with admiration · An unofficial fan-made game</span>
+        <button id="resetButton" class="reset-button">RESET PROGRESS</button>
+      </footer>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="script.js"></script>
+  </body>
+</html>

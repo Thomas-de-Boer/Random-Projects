@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A polished, editable CV website template for [YOUR NAME]."
+    />
+    <title>[YOUR NAME] — CV & Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="#top" aria-label="Back to top">
+          <span class="brand-mark">YN</span>
+          <span class="brand-text">[YOUR NAME]</span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span class="sr-only">Toggle navigation</span>
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Main navigation">
+          <a href="#about">About</a>
+          <a href="#experience">Experience</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+          <a class="nav-cta" href="mailto:your.email@example.com">Let's talk <span>↗</span></a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero section-grid">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="status-dot"></span> Available for new opportunities</p>
+            <h1>Building <em>meaningful</em> digital experiences.</h1>
+            <p class="hero-description">
+              I’m <strong>[YOUR NAME]</strong>, a [YOUR ROLE] based in [YOUR CITY].
+              I help ambitious teams turn complex ideas into clear, useful, and memorable products.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#experience">Explore my work <span>↓</span></a>
+              <a class="button button-quiet" href="[LINK_TO_YOUR_CV.pdf]" download>Download CV <span>↓</span></a>
+            </div>
+          </div>
+          <div class="hero-aside">
+            <div class="portrait-card">
+              <div class="portrait-placeholder">[YOUR<br />PHOTO]</div>
+              <span class="portrait-label">Based in [CITY], [COUNTRY]</span>
+              <span class="portrait-number">01</span>
+            </div>
+            <div class="hero-note">
+              <span class="scribble">✳</span>
+              <p>Curious by nature,<br />careful by craft.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="ticker" aria-label="Areas of expertise">
+          <div class="ticker-track">
+            <span>Product strategy</span><i>✳</i><span>Visual design</span><i>✳</i>
+            <span>Creative development</span><i>✳</i><span>Product strategy</span><i>✳</i>
+            <span>Visual design</span><i>✳</i><span>Creative development</span><i>✳</i>
+          </div>
+        </section>
+
+        <section class="content-section section-grid" id="about">
+          <div class="section-label">01 / About me</div>
+          <div class="section-content about-content">
+            <h2>A little bit about <em>who I am.</em></h2>
+            <p class="lead">
+              [WRITE A SHORT INTRODUCTION ABOUT YOURSELF. Share what motivates you,
+              what you’re especially good at, and the kind of work you want to do next.]
+            </p>
+            <div class="about-details">
+              <div>
+                <span class="detail-label">Currently</span>
+                <p>[YOUR CURRENT ROLE]<br />at [COMPANY NAME]</p>
+              </div>
+              <div>
+                <span class="detail-label">Education</span>
+                <p>[DEGREE / CERTIFICATION]<br />[SCHOOL / INSTITUTION]</p>
+              </div>
+              <div>
+                <span class="detail-label">Outside of work</span>
+                <p>[YOUR HOBBIES]<br />[YOUR INTERESTS]</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section section-grid" id="experience">
+          <div class="section-label">02 / Experience</div>
+          <div class="section-content">
+            <h2>Where I’ve made an <em>impact.</em></h2>
+            <div class="experience-list">
+              <article class="experience-item">
+                <div class="experience-meta"><span>2022 — Now</span><span>Amsterdam, NL</span></div>
+                <div class="experience-main">
+                  <h3>[YOUR CURRENT ROLE]</h3>
+                  <p class="company">[COMPANY NAME]</p>
+                  <p>[Add two or three sentences describing your role, responsibilities, and measurable impact.]</p>
+                  <div class="tag-list"><span>Strategy</span><span>Leadership</span><span>Design</span></div>
+                </div>
+              </article>
+              <article class="experience-item">
+                <div class="experience-meta"><span>2019 — 2022</span><span>[CITY, COUNTRY]</span></div>
+                <div class="experience-main">
+                  <h3>[PREVIOUS ROLE]</h3>
+                  <p class="company">[COMPANY NAME]</p>
+                  <p>[Describe the problem you helped solve and the result your work created for the team or customers.]</p>
+                  <div class="tag-list"><span>Research</span><span>Product</span><span>Collaboration</span></div>
+                </div>
+              </article>
+              <article class="experience-item">
+                <div class="experience-meta"><span>2017 — 2019</span><span>[CITY, COUNTRY]</span></div>
+                <div class="experience-main">
+                  <h3>[FIRST ROLE / INTERNSHIP]</h3>
+                  <p class="company">[COMPANY NAME]</p>
+                  <p>[Add a concise summary of your responsibilities and your proudest contribution here.]</p>
+                  <div class="tag-list"><span>Foundation</span><span>Growth</span></div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section section-grid projects-section" id="projects">
+          <div class="section-label">03 / Selected work</div>
+          <div class="section-content">
+            <h2>A few things I’m <em>proud of.</em></h2>
+            <div class="project-grid">
+              <a class="project-card project-card-dark" href="[PROJECT_LINK]">
+                <div class="project-topline"><span>01</span><span>↗</span></div>
+                <div class="project-art art-one"><span>[PROJECT<br />IMAGE]</span></div>
+                <div class="project-info"><h3>[PROJECT NAME]</h3><p>[One-line project description]</p></div>
+              </a>
+              <a class="project-card project-card-lilac" href="[PROJECT_LINK]">
+                <div class="project-topline"><span>02</span><span>↗</span></div>
+                <div class="project-art art-two"><span>[PROJECT<br />IMAGE]</span></div>
+                <div class="project-info"><h3>[PROJECT NAME]</h3><p>[One-line project description]</p></div>
+              </a>
+              <a class="project-card project-card-peach" href="[PROJECT_LINK]">
+                <div class="project-topline"><span>03</span><span>↗</span></div>
+                <div class="project-art art-three"><span>[PROJECT<br />IMAGE]</span></div>
+                <div class="project-info"><h3>[PROJECT NAME]</h3><p>[One-line project description]</p></div>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="skills-section section-grid">
+          <div class="section-label">04 / Toolkit</div>
+          <div class="section-content skills-layout">
+            <h2>Things I’m good <em>at.</em></h2>
+            <div class="skills-columns">
+              <ul><li>01 — [CORE SKILL]</li><li>02 — [CORE SKILL]</li><li>03 — [CORE SKILL]</li></ul>
+              <ul><li>04 — [CORE SKILL]</li><li>05 — [CORE SKILL]</li><li>06 — [CORE SKILL]</li></ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="contact-section section-grid" id="contact">
+          <div class="section-label">05 / Get in touch</div>
+          <div class="section-content contact-content">
+            <p class="eyebrow">Have a project in mind?</p>
+            <h2>Let’s make something <em>great.</em></h2>
+            <a class="email-link" href="mailto:your.email@example.com">your.email@example.com <span>↗</span></a>
+            <div class="social-links">
+              <a href="[LINKEDIN_URL]">LinkedIn ↗</a>
+              <a href="[GITHUB_URL]">GitHub ↗</a>
+              <a href="[INSTAGRAM_URL]">Instagram ↗</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <span>© <span id="year"></span> [YOUR NAME]</span>
+        <span>Designed & built with intention.</span>
+        <a href="#top">Back to top ↑</a>
+      </footer>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
