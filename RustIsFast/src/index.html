@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fast, because Rust</title>
+<style>
+  :root {
+    --bg: #0c0a0d;
+    --panel: #151216;
+    --line: #2a242b;
+    --text: #efe9e4;
+    --dim: #9a8f8a;
+    --rust: #f46a25;
+    --rust-soft: #ffb07a;
+    --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.55 system-ui, "Segoe UI", sans-serif;
+  }
+  main { max-width: 1080px; margin: 0 auto; padding: 56px 20px 80px; }
+
+  .eyebrow {
+    font: 12px var(--mono); letter-spacing: .14em; text-transform: uppercase;
+    color: var(--rust);
+  }
+  h1 {
+    font-size: clamp(34px, 6vw, 64px); line-height: 1.04; letter-spacing: -.03em;
+    margin: 14px 0 0; font-weight: 700; text-wrap: balance;
+  }
+  h1 .num { color: var(--rust); font-variant-numeric: tabular-nums; }
+  .lede { color: var(--dim); max-width: 60ch; margin: 18px 0 0; }
+
+  section { margin-top: 64px; }
+  h2 { font-size: 22px; letter-spacing: -.01em; margin: 0 0 4px; }
+  .sub { color: var(--dim); margin: 0 0 18px; max-width: 70ch; }
+
+  .stage {
+    position: relative; border: 1px solid var(--line); border-radius: 10px;
+    overflow: hidden; background: #000;
+  }
+  canvas#view {
+    display: block; width: 100%; aspect-ratio: 16 / 9;
+    cursor: grab; touch-action: none;
+  }
+  canvas#view.dragging { cursor: grabbing; }
+  .hud {
+    position: absolute; left: 12px; top: 12px; pointer-events: none;
+    font: 12px var(--mono); color: var(--text);
+    background: rgba(12, 10, 13, .72); backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, .08); border-radius: 6px;
+    padding: 8px 10px; min-width: 190px;
+  }
+  .hud b { color: var(--rust-soft); font-weight: 600; float: right; margin-left: 16px;
+           font-variant-numeric: tabular-nums; }
+  .hud div { white-space: nowrap; }
+
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+  button {
+    font: 600 14px system-ui, sans-serif; color: var(--text);
+    background: var(--panel); border: 1px solid var(--line); border-radius: 7px;
+    padding: 9px 16px; cursor: pointer;
+  }
+  button:hover { border-color: var(--rust); }
+  button.primary { background: var(--rust); border-color: var(--rust); color: #1a0b02; }
+  button.primary:hover { background: var(--rust-soft); }
+  button:disabled { opacity: .5; cursor: default; }
+  .hint { color: var(--dim); font-size: 13px; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .stat .label { font: 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
+  .stat .value { font-size: 28px; font-weight: 700; letter-spacing: -.02em;
+                 font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .stat .value small { font-size: 14px; font-weight: 500; color: var(--dim); margin-left: 4px; }
+  .stat.hot .value { color: var(--rust); }
+
+  .bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin: 16px 0; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--rust); }
+
+  .split { height: 34px; display: flex; border-radius: 7px; overflow: hidden; border: 1px solid var(--line); }
+  .split span { display: flex; align-items: center; font: 12px var(--mono); white-space: nowrap;
+                padding: 0 10px; overflow: hidden; }
+  .split .srv { background: var(--rust); color: #1a0b02; min-width: 3px; padding: 0; }
+  .split .rest { background: var(--panel); color: var(--dim); flex: 1; }
+  .note { color: var(--dim); font-size: 13px; margin-top: 10px; max-width: 75ch; }
+
+  footer { margin-top: 72px; color: var(--dim); font: 12px var(--mono); }
+
+  @media (max-width: 720px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .hud { font-size: 11px; min-width: 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">actix-web · one binary · no framework on the page</div>
+  <h1>The server built this page in <span class="num" id="heroNum">…</span></h1>
+  <p class="lede">Measured inside the Rust process and sent back in the
+    <code>Server-Timing</code> header. Everything below is live: each number comes
+    from a request your browser just made.</p>
+
+  <section>
+    <h2>Every frame is rendered by the server</h2>
+    <p class="sub">This is not WebGL. Each time you move, the browser asks Rust for a new
+      image; Rust computes every pixel across all your cores and ships back raw RGBA.
+      Scroll to zoom, drag to pan.</p>
+    <div class="stage">
+      <canvas id="view"></canvas>
+      <div class="hud">
+        <div>render <b id="hRender">–</b></div>
+        <div>round trip <b id="hTrip">–</b></div>
+        <div>iterations <b id="hIter">–</b></div>
+        <div>throughput <b id="hRate">–</b></div>
+        <div>threads <b id="hThreads">–</b></div>
+        <div>zoom <b id="hZoom">–</b></div>
+        <div>fps <b id="hFps">–</b></div>
+      </div>
+    </div>
+    <div class="row">
+      <button class="primary" id="dive">Dive</button>
+      <button id="reset">Reset</button>
+      <span class="hint">Dive zooms 100-billion-fold into Seahorse Valley, one server-rendered frame at a time.</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Hammer it</h2>
+    <p class="sub">Fire 5,000 requests at the JSON endpoint as fast as this browser tab can send them.</p>
+    <div class="stats">
+      <div class="stat hot"><div class="label">Requests / sec</div><div class="value" id="sRps">–</div></div>
+      <div class="stat"><div class="label">Median round trip</div><div class="value" id="sP50">–</div></div>
+      <div class="stat"><div class="label">p99 round trip</div><div class="value" id="sP99">–</div></div>
+      <div class="stat hot"><div class="label">Time inside Rust</div><div class="value" id="sSrv">–</div></div>
+    </div>
+    <div class="bar"><i id="progress"></i></div>
+    <div class="split" id="split" hidden>
+      <span class="srv" id="splitSrv"></span>
+      <span class="rest" id="splitRest"></span>
+    </div>
+    <div class="row">
+      <button class="primary" id="hammer">Send 5,000 requests</button>
+      <span class="hint" id="hammerHint"></span>
+    </div>
+    <p class="note">The requests-per-second figure is a floor, not a ceiling: a browser tab
+      only opens about six connections and spends far longer on each request than the server does.
+      The orange sliver is the server's share of a median round trip.</p>
+  </section>
+
+  <footer id="foot"></footer>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function fmtDuration(ms) {
+  if (ms < 0.001) return (ms * 1e6).toFixed(0) + ' ns';
+  if (ms < 1) return (ms * 1000).toFixed(ms < 0.01 ? 1 : 0) + ' µs';
+  if (ms < 100) return ms.toFixed(1) + ' ms';
+  return ms.toFixed(0) + ' ms';
+}
+function serverMs(res) {
+  const m = /dur=([\d.]+)/.exec(res.headers.get('server-timing') || '');
+  return m ? parseFloat(m[1]) : NaN;
+}
+
+// ---- Hero: how long the server spent on this very document ----
+(async () => {
+  const nav = performance.getEntriesByType('navigation')[0];
+  let ms = nav && nav.serverTiming && nav.serverTiming[0] ? nav.serverTiming[0].duration : NaN;
+  if (!(ms > 0)) ms = serverMs(await fetch('/api/ping'));
+  $('heroNum').textContent = isNaN(ms) ? 'no time at all' : fmtDuration(ms);
+})();
+
+// ---- Mandelbrot explorer ----
+const canvas = $('view'), ctx = canvas.getContext('2d');
+const HOME = { cx: -0.6, cy: 0, span: 3.6 };
+const TARGET = { cx: -0.743643887037151, cy: 0.131825904205330 };
+const MIN_SPAN = 2e-11;
+let view = { ...HOME };
+let busy = false, queued = false, diving = false;
+let frameTimes = [];
+
+function frameSize() {
+  const scale = Math.min(window.devicePixelRatio || 1, 1.5);
+  // Deep frames cost billions of iterations, so the dive trades pixels for frame rate.
+  const w = Math.min(diving ? 960 : 1280, Math.round(canvas.clientWidth * scale));
+  return { w, h: Math.round(w * 9 / 16) };
+}
+
+async function draw() {
+  if (busy) { queued = true; return; }
+  busy = true;
+  const { w, h } = frameSize();
+  const zoom = HOME.span / view.span;
+  const iter = Math.min(4000, Math.round(220 + 55 * Math.log2(Math.max(1, zoom))));
+  const t0 = performance.now();
+  try {
+    const res = await fetch(`/api/mandelbrot?cx=${view.cx}&cy=${view.cy}&span=${view.span}&w=${w}&h=${h}&iter=${iter}`);
+    const buf = await res.arrayBuffer();
+    const trip = performance.now() - t0;
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    ctx.putImageData(new ImageData(new Uint8ClampedArray(buf), w, h), 0, 0);
+
+    const renderMs = +res.headers.get('x-render-us') / 1000;
+    const iters = +res.headers.get('x-iterations');
+    $('hRender').textContent = fmtDuration(renderMs);
+    $('hTrip').textContent = fmtDuration(trip);
+    $('hIter').textContent = (iters / 1e6).toFixed(1) + ' M';
+    $('hRate').textContent = (iters / renderMs / 1e6).toFixed(2) + ' B/s';
+    $('hThreads').textContent = res.headers.get('x-threads');
+    $('hZoom').textContent = zoom < 1000 ? zoom.toFixed(1) + '×' : zoom.toExponential(1) + '×';
+
+    const now = performance.now();
+    frameTimes = frameTimes.filter(t => now - t < 1000);
+    frameTimes.push(now);
+    $('hFps').textContent = frameTimes.length > 1 ? frameTimes.length : '–';
+  } catch (e) {
+    diving = false;
+  }
+  busy = false;
+  if (diving) stepDive();
+  else if (queued) { queued = false; draw(); }
+}
+
+function stepDive() {
+  if (view.span <= MIN_SPAN) { stopDive(); return; }
+  view.span *= 0.955;
+  // Ease the centre toward the target so it lands as the zoom tightens.
+  view.cx += (TARGET.cx - view.cx) * 0.12;
+  view.cy += (TARGET.cy - view.cy) * 0.12;
+  draw();
+}
+function stopDive() { diving = false; $('dive').textContent = 'Dive'; }
+
+$('dive').onclick = () => {
+  if (diving) { stopDive(); return; }
+  if (view.span <= MIN_SPAN * 4) view = { ...HOME };
+  diving = true; $('dive').textContent = 'Stop';
+  stepDive();
+};
+$('reset').onclick = () => { stopDive(); view = { ...HOME }; draw(); };
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  stopDive();
+  const r = canvas.getBoundingClientRect();
+  const fx = (e.clientX - r.left) / r.width - 0.5;
+  const fy = (e.clientY - r.top) / r.height - 0.5;
+  const aspect = r.height / r.width;
+  const next = Math.min(8, Math.max(MIN_SPAN, view.span * Math.exp(e.deltaY * 0.0015)));
+  // Keep the point under the cursor fixed while zooming.
+  view.cx += fx * (view.span - next);
+  view.cy += fy * aspect * (view.span - next);
+  view.span = next;
+  draw();
+}, { passive: false });
+
+let drag = null;
+canvas.addEventListener('pointerdown', e => {
+  stopDive();
+  drag = { x: e.clientX, y: e.clientY };
+  canvas.setPointerCapture(e.pointerId);
+  canvas.classList.add('dragging');
+});
+canvas.addEventListener('pointermove', e => {
+  if (!drag) return;
+  const perPx = view.span / canvas.clientWidth;
+  view.cx -= (e.clientX - drag.x) * perPx;
+  view.cy -= (e.clientY - drag.y) * perPx;
+  drag = { x: e.clientX, y: e.clientY };
+  draw();
+});
+const endDrag = () => { drag = null; canvas.classList.remove('dragging'); };
+canvas.addEventListener('pointerup', endDrag);
+canvas.addEventListener('pointercancel', endDrag);
+window.addEventListener('resize', draw);
+draw();
+
+// ---- Load test ----
+$('hammer').onclick = async () => {
+  const TOTAL = 5000, WORKERS = 48;
+  const btn = $('hammer');
+  btn.disabled = true;
+  stopDive();
+  const trips = new Float64Array(TOTAL), server = new Float64Array(TOTAL);
+  let sent = 0, done = 0, failed = 0, served = 0;
+  const start = performance.now();
+
+  async function worker() {
+    while (sent < TOTAL) {
+      const i = sent++;
+      const t0 = performance.now();
+      try {
+        const res = await fetch('/api/ping');
+        const body = await res.json();
+        served = Math.max(served, body.served);
+        server[i] = serverMs(res);
+      } catch { failed++; }
+      trips[i] = performance.now() - t0;
+      done++;
+    }
+  }
+  const tick = setInterval(() => {
+    $('progress').style.width = (done / TOTAL * 100) + '%';
+    $('sRps').textContent = Math.round(done / ((performance.now() - start) / 1000)).toLocaleString();
+  }, 60);
+  await Promise.all(Array.from({ length: WORKERS }, worker));
+  clearInterval(tick);
+
+  const elapsed = performance.now() - start;
+  const sorted = Array.from(trips).sort((a, b) => a - b);
+  const srvSorted = Array.from(server).filter(v => v > 0).sort((a, b) => a - b);
+  const p50 = sorted[Math.floor(TOTAL * 0.5)], p99 = sorted[Math.floor(TOTAL * 0.99)];
+  const srv = srvSorted[Math.floor(srvSorted.length * 0.5)];
+
+  $('progress').style.width = '100%';
+  $('sRps').textContent = Math.round(TOTAL / (elapsed / 1000)).toLocaleString();
+  $('sP50').textContent = fmtDuration(p50);
+  $('sP99').textContent = fmtDuration(p99);
+  $('sSrv').textContent = fmtDuration(srv);
+
+  const share = srv / p50 * 100;
+  $('split').hidden = false;
+  $('splitSrv').style.width = share + '%';
+  $('splitRest').textContent =
+    `Rust: ${fmtDuration(srv)} (${share < 0.1 ? share.toFixed(3) : share.toFixed(1)}%) · network stack + browser: ${fmtDuration(p50 - srv)}`;
+  $('hammerHint').textContent =
+    `${TOTAL.toLocaleString()} requests in ${(elapsed / 1000).toFixed(2)} s` + (failed ? `, ${failed} failed` : ', 0 failed');
+  $('foot').textContent = `${location.host} · ${served.toLocaleString()} requests served since boot`;
+  btn.disabled = false;
+};
+</script>
+</body>
+</html>
